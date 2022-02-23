@@ -15,9 +15,6 @@ on:
   push:
     branches: [ feature ]
 
-env:
-  Build_branch: build
-
 jobs:
   test-step:
     name: test steps
@@ -44,8 +41,6 @@ jobs:
       run: |
         git config --global user.name "sinsky"
         git config --global user.email "60662802+sinsky@users.noreply.github.com"
-        git checkout -b $Build_branch
-        git pull origin $Build_branch
 
     - name: cache node_modules
       id: node_modules_cache_id
@@ -54,12 +49,6 @@ jobs:
         path: |
           node_modules
         key: node-v${{ matrix.node-v }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
-
-    - name: echo details
-      run: |
-        echo "- details -------"
-        echo $(pwd)
-        echo $(ls -l)
     
     - name: yarn setup
       run: yarn install
@@ -67,16 +56,13 @@ jobs:
     - name: build
       run: yarn build
 
-    - name: 確認
-      run: git branch
-
     - name: build push
       run: |
         git add -f ./dist
         git commit -m "workflow deploy!"
-        git push origin $Build_branch
+        git push origin feature
     
     - name: merge
       run: |
         git checkout -b main
-        git merge $Build_branch
+        git merge feature
