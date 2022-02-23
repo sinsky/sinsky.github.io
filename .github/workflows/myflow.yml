@@ -15,6 +15,9 @@ on:
   push:
     branches: [ feature ]
 
+env:
+  Build_branch: build
+
 jobs:
   test-step:
     name: test steps
@@ -27,7 +30,6 @@ jobs:
     strategy:
       matrix:
         node-v: [16]
-        build-branch: build
 
     steps:
     - name: Checkout repository
@@ -42,7 +44,7 @@ jobs:
       run: |
         git config --global user.name "sinsky"
         git config --global user.email "60662802+sinsky@users.noreply.github.com"
-        git checkout -b ${{ matrix.build-branch }}
+        git checkout -b $Build_branch
 
     - name: cache node_modules
       id: node_modules_cache_id
@@ -71,9 +73,9 @@ jobs:
       run: |
         git add -f ./dist
         git commit -m "workflow deploy!"
-        git push origin ${{ matrix.build-branch }}
+        git push origin $Build_branch
     
     - name: merge
       run: |
         git checkout main
-        git merge ${{ matrix.build-branch }}
+        git merge $Build_branch
