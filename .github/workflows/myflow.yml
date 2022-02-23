@@ -24,12 +24,9 @@ jobs:
     #   contents: read
     #   security-events: write
 
-    # strategy:
-    #   fail-fast: false
-    #   matrix:
-    #     language: ["javascript"]
-    #     # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
-    #     # Learn more about CodeQL language support at https://git.io/codeql-language-support
+    strategy:
+      matrix:
+        node-v: [16]
 
     steps:
     - name: Checkout repository
@@ -38,9 +35,33 @@ jobs:
     - name: Setup Node.js@16
       uses: actions/setup-node@v2
       with:
-        node-version: "16"
+        node-version: ${{ matrix.node-v }}
+
+    - name: cache node_modules
+      id: node_modules_cache_id
+      uses: actions/cache@v2
+      with:
+        path: |
+          node_modules
+        key: node-v${{ matrix.node-v }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+
+    - name: echo details
+      run: |
+        echo "- details -------"
+        echo $(pwd)
+        echo $(ls -l)
     
-    - name: echo dir
-      run: echo $(pwd)
-    - name: echo ls
-      run: echo $(ls -l)
+    - name: yarn setup
+      run: yarn install
+    
+    - name: build
+      run: yarn build
+
+    - name: deploy
+      run: |
+        git config --global user.name "sinsky"
+        git config --global user.email "60662802+sinsky@users.noreply.github.com"
+        git add ./dist
+        git commit -m "workflow deploy!"
+        git push
+    
