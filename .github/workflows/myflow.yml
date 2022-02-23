@@ -45,6 +45,7 @@ jobs:
         git config --global user.name "sinsky"
         git config --global user.email "60662802+sinsky@users.noreply.github.com"
         git checkout -b $Build_branch
+        git pull origin $Build_branch
 
     - name: cache node_modules
       id: node_modules_cache_id
