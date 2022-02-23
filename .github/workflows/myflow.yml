@@ -42,3 +42,5 @@ jobs:
     
     - name: echo dir
       run: echo $(pwd)
+    - name: echo ls
+      run: echo $(ls -l)
