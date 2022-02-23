@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
         node-v: [16]
-        build-branch: feature-build
+        build-branch: feature/build
 
     steps:
     - name: Checkout repository
