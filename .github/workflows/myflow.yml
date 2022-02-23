@@ -66,3 +66,4 @@ jobs:
       run: |
         git checkout -b main
         git merge feature
+        git push origin main
