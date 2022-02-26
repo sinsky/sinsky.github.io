@@ -37,11 +37,13 @@ jobs:
       with:
         node-version: ${{ matrix.node-v }}
 
-    - name: build branch setup
+    - name: git merge feature --> main
       run: |
         git config --global user.name "sinsky"
         git config --global user.email "60662802+sinsky@users.noreply.github.com"
-
+        git pull
+        git checkout -b main
+        git merge feature
     - name: cache node_modules
       id: node_modules_cache_id
       uses: actions/cache@v2
@@ -60,10 +62,4 @@ jobs:
       run: |
         git add -f ./dist
         git commit -m "workflow deploy!"
-        git push origin feature
-    
-    - name: merge
-      run: |
-        git checkout -b main
-        git merge feature
         git push origin main
