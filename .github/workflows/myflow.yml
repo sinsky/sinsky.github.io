@@ -62,4 +62,8 @@ jobs:
       run: |
         git add -f ./dist
         git commit -m "workflow deploy!"
+<<<<<<< HEAD
         git push origin main
+=======
+        git push origin main
+>>>>>>> 88643c8897e1de68f91d35b20f094a6057f16b2b
